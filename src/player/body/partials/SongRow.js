@@ -5,7 +5,7 @@ import {useSoundLayerValue} from '../../../data/SoundLayer';
 
 function SongRow({track}) {
     const [{}, dispatch] = useDataLayerValue();
-    const [{playing}, soundDispatch] = useSoundLayerValue();
+    const [{playing, repeat}, soundDispatch] = useSoundLayerValue();
 
     const changeTrack = (e, track) => {
         dispatch({
@@ -19,9 +19,11 @@ function SongRow({track}) {
             playing: false,
         });
 
+        let audio = new Audio(track.preview_url);
+        audio.loop = repeat;
         soundDispatch({
             type: 'SET_AUDIO',
-            audio: new Audio(track.preview_url)
+            audio: audio
         });
 
         if(wasPlaying) {

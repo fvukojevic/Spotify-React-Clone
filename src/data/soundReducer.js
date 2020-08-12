@@ -1,7 +1,8 @@
 export const soundInitialState = {
     audio: null,
     playing: false,
-    volume: 0.3
+    volume: 0.3,
+    repeat: false,
 };
 
 const soundReducer = (state, action) => {
@@ -26,10 +27,20 @@ const soundReducer = (state, action) => {
                 playing: action.playing
             };
         case 'SET_VOLUME':
-            state.audio.volume = action.volume;
+            if(state.audio) {
+                state.audio.volume = action.volume;
+            }
             return {
                 ...state,
                 volume: action.volume,
+            };
+        case 'SET_REPEAT':
+            if(state.audio) {
+                state.audio.loop = action.repeat;
+            }
+            return {
+                ...state,
+                repeat: action.repeat,
             };
         default:
             return state;

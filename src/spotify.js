@@ -2,7 +2,7 @@
 
 export const authEndpoint = 'https://accounts.spotify.com/authorize';
 const redirectUrl = 'http://localhost:3000/'; //where are you running your app (local react by default is http://localhost:3000/
-const clientId = ''; // clintId you can get at https://developer.spotify.com/dashboard
+const clientId = 'c5699b604b1748bc85f46bf6dda79b7c'; // clintId you can get at https://developer.spotify.com/dashboard
 
 /**
  * You can read more about Spotify scopes at https://developer.spotify.com/documentation/general/guides/scopes/
