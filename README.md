@@ -36,7 +36,7 @@ Installation:
 
 To Start Server:
 
-`npm start`  
+`npm run build && npm start`  
 
 To Visit App:
 
