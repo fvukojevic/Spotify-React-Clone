@@ -14,7 +14,7 @@ import {useSoundLayerValue} from "../../data/SoundLayer";
 
 function Footer() {
     const [{track}] = useDataLayerValue();
-    const [{playing, volume}, soundDispatch] = useSoundLayerValue();
+    const [{playing, volume, repeat}, soundDispatch] = useSoundLayerValue();
 
 
     const startPlaying = () => {
@@ -32,6 +32,13 @@ function Footer() {
         soundDispatch({
             type: "SET_PLAYING",
             playing: false
+        });
+    };
+
+    const setRepeat = () => {
+        soundDispatch({
+            type: "SET_REPEAT",
+            repeat: !repeat
         });
     };
 
@@ -58,7 +65,7 @@ function Footer() {
                     <PlayCircleOutlineIcon onClick={track ? startPlaying : null} fontSize='large'
                                            className='footer__icon'/>}
                 <SkipNextIcon className='footer__icon'/>
-                <RepeatIcon className='footer__green'/>
+                <RepeatIcon onClick={track? setRepeat : null} className={repeat ? 'footer__green' : 'footer__icon'}/>
             </div>
             <div className='footer__right'>
                 <Grid container spacing={2}>
