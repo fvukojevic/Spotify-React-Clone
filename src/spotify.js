@@ -1,7 +1,8 @@
 //https://developer.spotify.com/documentation/web-playback-sdk/quick-start/
 
 export const authEndpoint = 'https://accounts.spotify.com/authorize';
-const redirectUrl = 'http://localhost:3000/'; //where are you running your app (local react by default is http://localhost:3000/
+
+const redirectUrl = window.location.origin + '/'; //where are you running your app (local react by default is http://localhost:3000/
 const clientId = 'c5699b604b1748bc85f46bf6dda79b7c'; // clintId you can get at https://developer.spotify.com/dashboard
 
 /**
