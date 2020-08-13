@@ -3,6 +3,7 @@ export const soundInitialState = {
     playing: false,
     volume: 0.3,
     repeat: false,
+    shuffle: false,
 };
 
 const soundReducer = (state, action) => {
@@ -42,6 +43,14 @@ const soundReducer = (state, action) => {
                 ...state,
                 repeat: action.repeat,
             };
+        case 'SET_SHUFFLE':
+            if(state.audio) {
+                return {
+                    ...state,
+                    shuffle: action.shuffle
+                };
+            }
+            return state;
         default:
             return state;
     }

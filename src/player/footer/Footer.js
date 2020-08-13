@@ -13,8 +13,8 @@ import {useDataLayerValue} from "../../data/DataLayer";
 import {useSoundLayerValue} from "../../data/SoundLayer";
 
 function Footer() {
-    const [{track}] = useDataLayerValue();
-    const [{playing, volume, repeat}, soundDispatch] = useSoundLayerValue();
+    const [{track, tracks}, dispatch] = useDataLayerValue();
+    const [{audio, playing, volume, repeat, shuffle}, soundDispatch] = useSoundLayerValue();
 
 
     const startPlaying = () => {
@@ -36,9 +36,22 @@ function Footer() {
     };
 
     const setRepeat = () => {
+        if(!repeat && shuffle) {
+            setShuffle();
+        }
         soundDispatch({
             type: "SET_REPEAT",
             repeat: !repeat
+        });
+    };
+
+    const setShuffle = () => {
+        if(!shuffle && repeat) {
+            setRepeat();
+        }
+        soundDispatch({
+            type: "SET_SHUFFLE",
+            shuffle: !shuffle
         });
     };
 
@@ -48,6 +61,53 @@ function Footer() {
             volume: value / 100
         });
     };
+
+    if(audio) {
+        audio.onended = () => {
+            if(shuffle) {
+                while(true) {
+                    let randomTrackNumber = Math.floor((Math.random() * tracks.items.length));
+                    let randomTrack = tracks.items[randomTrackNumber].track;
+                    if(track !== randomTrack) {
+                        dispatch({
+                            type: 'SET_TRACK',
+                            track: randomTrack
+                        });
+
+                        let wasPlaying = playing;
+                        soundDispatch({
+                            type: 'SET_PLAYING',
+                            playing: false,
+                        });
+
+                        let audio = new Audio(randomTrack.preview_url);
+                        audio.loop = repeat;
+                        soundDispatch({
+                            type: 'SET_AUDIO',
+                            audio: audio
+                        });
+
+                        if(wasPlaying) {
+                            soundDispatch({
+                                type: 'SET_PLAYING',
+                                playing: true,
+                            });
+                        }
+
+                        document.title = `${randomTrack.name} · ${randomTrack.artists.map((artist) => artist.name).join(', ')}`
+                        break
+                    }
+                }
+            }
+            if(!shuffle && !repeat) {
+                soundDispatch({
+                    type: 'SET_PLAYING',
+                    playing: false,
+                });
+            }
+        }
+    }
+
     return (
         <div className="footer">
             <div className='footer__left'>
@@ -58,7 +118,7 @@ function Footer() {
                 </div>
             </div>
             <div className='footer__center'>
-                <ShuffleIcon className='footer__green'/>
+                <ShuffleIcon onClick={track? setShuffle : null} className={shuffle ? 'footer__green' : 'footer__icon'}/>
                 <SkipPreviousIcon className='footer__icon'/>
                 {playing ? <PauseCircleOutlineIcon onClick={track ? stopPlaying : null} fontSize='large'
                                                    className='footer__icon'/> :
